@@ -1,3 +1,15 @@
+/* header styles */
+header .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    background-color: black;
+    padding: 0.625rem;
+    color: white;
+}
+
+/* map styles */
 #map {
     height: 800px;
 }
