@@ -286,7 +286,6 @@
         [37.7704, -122.4566, "Emergency services are responding to a fire incident near the Japanese Tea Garden. Stay safe!"]
       ];
 
-      let popupText = 
       pinDataStream.forEach(data => {
         console.log("calling create marker "); // debug
         createMarker(map, [data[0],data[1]], data[2]);

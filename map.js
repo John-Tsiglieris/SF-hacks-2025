@@ -195,11 +195,16 @@ function UGCGeocodeToCoords(code) {
 
 
 
-export function createMarker(map, coordinates, text) {
-    console.log("inside create marker"); //debug
-    let popupText  = "2025-04-04: User reported event FIRE, [LAT,LON], 'I heard a tree fell onto a car and started the fire'";
+/**
+ * Creates markers on map given coordinates, a message, and the userID/name
+ *
+ * See ~line 289 for on dashboard.html for example usage
+ * 
+ * @returns {marker} - The actual pin object, but maybe it's not needed
+ */
+export function createMarker(map, coordinates, text, user = "anonymous") {
     const marker = L.marker(coordinates).addTo(map);
-    marker.bindPopup(`2025-04-04: User reported event FIRE, [${coordinates[0]},${coordinates[1]}], '${text}'`).openPopup();
+    marker.bindPopup(`2025-04-04: User ${user} reported event FIRE, [${coordinates[0]},${coordinates[1]}], '${text}'`).openPopup();
     return marker;
 }
 
