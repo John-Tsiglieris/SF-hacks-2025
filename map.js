@@ -202,9 +202,9 @@ function UGCGeocodeToCoords(code) {
  * 
  * @returns {marker} - The actual pin object, but maybe it's not needed
  */
-export function createMarker(map, coordinates, text, user = "anonymous") {
+export function createMarker(map, coordinates, text, type = "unknown", user = "anonymous") {
     const marker = L.marker(coordinates).addTo(map);
-    marker.bindPopup(`2025-04-04: User ${user} reported event FIRE, [${coordinates[0]},${coordinates[1]}], '${text}'`).openPopup();
+    marker.bindPopup(`2025-04-04: User ${user} reported event ${type}, [${coordinates[0]},${coordinates[1]}], '${text}'`).openPopup();
     return marker;
 }
 
