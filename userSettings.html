@@ -251,6 +251,13 @@
                   <option value="oceania">Oceania</option>
                 </select>
               </div>
+              <!-- Add the new city dropdown -->
+              <div class="mb-3">
+                <label for="city" class="form-label">City</label>
+                <select class="form-select" id="city" disabled>
+                  <option selected>First select a region...</option>
+                </select>
+              </div>
               <button type="submit" class="btn btn-primary">
                 Save Notifications
               </button>
@@ -422,6 +429,62 @@
       }
     });
   });
+</script>
+<script>
+    // City data object
+    const cityData = {
+        northamerica: [
+            "New York", "Los Angeles", "Toronto", "Mexico City", "Chicago",
+            "San Francisco", "Vancouver", "Montreal", "Miami", "Seattle"
+        ],
+        southamerica: [
+            "São Paulo", "Buenos Aires", "Lima", "Bogotá", "Rio de Janeiro",
+            "Santiago", "Caracas", "Medellín", "Quito", "Montevideo"
+        ],
+        europe: [
+            "London", "Paris", "Berlin", "Rome", "Madrid",
+            "Amsterdam", "Brussels", "Vienna", "Stockholm", "Copenhagen"
+        ],
+        asia: [
+            "Tokyo", "Shanghai", "Seoul", "Mumbai", "Beijing",
+            "Singapore", "Bangkok", "Dubai", "Hong Kong", "Jakarta"
+        ],
+        africa: [
+            "Cairo", "Lagos", "Johannesburg", "Nairobi", "Casablanca",
+            "Cape Town", "Accra", "Dakar", "Addis Ababa", "Dar es Salaam"
+        ],
+        oceania: [
+            "Sydney", "Melbourne", "Auckland", "Brisbane", "Perth",
+            "Wellington", "Adelaide", "Gold Coast", "Christchurch", "Hobart"
+        ]
+    };
+
+    // Get the select elements
+    const regionSelect = document.getElementById('geoRegion');
+    const citySelect = document.getElementById('city');
+
+    // Add event listener for region change
+    regionSelect.addEventListener('change', function() {
+        // Enable city select
+        citySelect.disabled = false;
+        
+        // Clear existing options
+        citySelect.innerHTML = '<option selected>Choose a city...</option>';
+        
+        // Get selected region
+        const selectedRegion = this.value;
+        
+        // If we have cities for this region
+        if (cityData[selectedRegion]) {
+            // Add new options
+            cityData[selectedRegion].forEach(city => {
+                const option = document.createElement('option');
+                option.value = city.toLowerCase().replace(/\s+/g, '-');
+                option.textContent = city;
+                citySelect.appendChild(option);
+            });
+        }
+    });
 </script>
 </body>
 </html>
