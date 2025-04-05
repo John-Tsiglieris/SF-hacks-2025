@@ -258,7 +258,7 @@
                   <option selected>First select a region...</option>
                 </select>
               </div>
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" id="submit-notifications" class="btn btn-primary">
                 Save Notifications
               </button>
             </form>
@@ -385,8 +385,8 @@
       });
     });
 
-    // Add event listeners to theme selection buttons/controls
-    document.querySelectorAll('[data-theme]').forEach(button => {
+    // Add event listeners to theme selection buttons/controls and save it to local storage
+    document.querySelectorAll('[data-theme]').forEach(button => { // maybe make it just select the city element, no need to use querySelectorAll. What are you trying to iterate through?
       button.addEventListener('click', () => {
         const selectedTheme = button.dataset.theme; // 'theme-light', 'theme-dark', etc.
         
@@ -428,6 +428,11 @@
         document.body.classList.add(newTheme);
       }
     });
+  });
+
+  document.getElementById('submit-notifications').addEventListener('click', () => {
+    let cityName = document.getElementById('submit-notifications').value;
+    localStorage.setItem('cityName', option);
   });
 </script>
 <script>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIRMS API Test Link Generator</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        label { display: block; margin-bottom: 5px; }
+        input[type="text"] { width: 300px; padding: 8px; margin-bottom: 15px; }
+        button { padding: 10px 15px; cursor: pointer; }
+        #link-container { margin-top: 20px; background-color: #f0f0f0; padding: 15px; border-radius: 5px; display: none; }
+        #firmsLink { word-wrap: break-word; }
+        .error { color: red; font-weight: bold; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+
+    <h1>NASA FIRMS API Link Generator</h1>
+    <p>
+        This page constructs a link to download FIRMS data.
+        Enter the API key from the oneNote to generate the link to download the KML file.<br>
+        <strong>Currently</strong>, the constructed link leads to a page that gives the error: Error in processing: Invalid format.
+        So the request is routed to the right place, but something is wrong.<br>
+
+        TODO:<br>
+        <ul>
+          <li>1:</li>
+          <li>2:</li>
+          <li>3:</li>
+        </ul>
+    </p>
+    <!--
+    <label for="apiKey">Enter Your NASA FIRMS API Key:</label>
+    <input type="text" id="apiKey" name="apiKey" placeholder="Paste your API Key here">
+    -->
+
+    <button id="generateButton">Generate KML Download Link (California, Last 24h)</button>
+
+    <div id="link-container">
+        <p>Click the link below to download the KML file directly from NASA FIRMS:</p>
+        <a id="firmsLink" href="#" target="_blank" rel="noopener noreferrer"></a>
+    </div>
+
+    <div id="error-message" class="error">
+        Please enter a valid API Key.
+    </div>
+
+    <script>
+        const generateButton = document.getElementById('generateButton');
+        const apiKeyInput = document.getElementById('apiKey');
+        const linkContainer = document.getElementById('link-container');
+        const firmsLink = document.getElementById('firmsLink');
+        const errorMessage = document.getElementById('error-message');
+
+        generateButton.addEventListener('click', () => {
+            //const apiKey = apiKeyInput.value.trim();
+            const apiKey = "868bff7eebc9d02f3dfdf93ddc105bca";
+
+            if (!apiKey) {
+                errorMessage.style.display = 'block';
+                linkContainer.style.display = 'none';
+                return; // Stop if key is empty
+            }
+
+            // --- Construct the FIRMS API URL ---
+            const baseURL = "https://firms.modaps.eosdis.nasa.gov/api/area/kml/";
+            const source = "VIIRS_SNPP_NRT"; // VIIRS Near Real-Time
+            const area = "-124.5,32.5,-114.0,42.0"; // Bounding box for California
+            const dayRange = "1"; // Last 24 hours
+
+            const finalURL = `${baseURL}${apiKey}/${source}/${area}/${dayRange}`;
+            // --- ---
+
+            // Update the link's href and text
+            firmsLink.href = finalURL;
+            firmsLink.textContent = finalURL; // Display the generated URL as text
+
+            // Show the link container and hide error
+            linkContainer.style.display = 'block';
+            errorMessage.style.display = 'none';
+        });
+    </script>
+
+</body>
+</html>
