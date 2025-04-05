@@ -57,7 +57,8 @@ async function getEndpoints(latitude, longitude){
 async function getForecast(office, gridX, gridY){
     try {
         const response = await fetch(
-            `https://api.weather.gov/gridpoints/${office}/${gridX},${gridY}/forecast`
+            //`https://api.weather.gov/gridpoints/${office}/${gridX},${gridY}/forecast`
+            `https://api.weather.gov/gridpoints/TOP/25,25/forecast`
         )
         // If the fetch response fails
         if (!response.ok){
@@ -81,8 +82,9 @@ function createWeatherCards(periods) {
     // Store the card container div from index.html
     const cardContainer = document.getElementById("card-container")
     // Create a card for each element in the periods array
+    let i = 0
     periods.forEach((element) => {
-        if (!element.name.endsWith("Night")) { // skip the nights for the rest of the week
+        if (i % 2 == 0) {
             // Create the html elements
             const div = document.createElement("div")
             const h2  = document.createElement("h2")
@@ -105,6 +107,8 @@ function createWeatherCards(periods) {
             // Append the card to the card container div
             cardContainer.appendChild(div)
         }
+        if (element.name == "Tonight") i++;
+        i++;
     })
     // Set favicon to the first weather icon
     const head = document.getElementsByTagName("head")[0]
