@@ -38,6 +38,7 @@ let cityMap = {
     "tampa": [27.9506, -82.4572]
 };
 
+
 export const cityCoordinates = {
     // West Coast
     'Los Angeles': [34.0522, -118.2437],
@@ -103,6 +104,24 @@ export function initializeMap(elementId) {
     return map;
 }
 
+export function initalizeFireReigon() {
+    if (map) {
+        console.log("Initializing the fire reigon"); //debug
+        var polygon = L.polygon(
+            [
+                [37.770918, -122.458205],
+                [37.768272, -122.459579],
+                [37.768001, -122.453828],
+            ],
+            { color: 'red' }
+        ).addTo(map);
+    } else {
+        console.error("Map is not initialized. Please initialize the map before adding polygons.");
+    }
+}
+
+
+
 export function updateMapView(map, city = null, region = null) {
     if (city && cityCoordinates[city]) {
         map.setView(cityCoordinates[city], 10);
@@ -120,6 +139,7 @@ export function generateWildfireData(center, steps = 40, initialSides = 3, maxSi
     const [lat, lng] = center;
 
     for (let t = 0; t < steps; t++) {
+        console.log("Generating step: ");
         const sides = Math.min(initialSides + t, maxSides); // gradually increase sides
         const radius = (t + 1) * radiusStep;
         const angleOffset = Math.random() * Math.PI * 2;
@@ -138,3 +158,53 @@ export function generateWildfireData(center, steps = 40, initialSides = 3, maxSi
 
     return data;
 }
+
+
+/**
+ * Receives a UGC Geo code and returns a representative coordinate (latitude, longitude)
+ * for that zone by parsing a NOAA .dbx file.
+ *
+ * Example usage:
+ *   UGCGeocodeToCoords("CAZ006");
+ *   // Returns [37.7558, -122.4423]
+ *
+ * Format of matching line:
+ *   STATE|CODE|WFO|ZONE NAME|UGC|COUNTY NAME|FIPS|TYPE|REGION|LAT|LON
+ *
+ * @param {string} code - A UGC zone code (e.g. "CAZ530")
+ * @returns {[number, number] | null} - [latitude, longitude] or null if not found
+ */
+function UGCGeocodeToCoords(code) {
+    const fs = require('fs');
+
+    const state = code.slice(0, 2);   // "CA"
+    const zone = code.slice(3);       // "530"
+    const dbxLines = fs.readFileSync('bp05mr24.dbx', 'utf-8').split('\n');
+
+    for (const line of dbxLines) {
+    const parts = line.trim().split('|');
+    if (parts[0] === state && parts[1] === zone) {
+        const lat = parseFloat(parts[9]);
+        const lon = parseFloat(parts[10]);
+        return [lat, lon];
+    }
+    }
+
+    return null; // not found
+}
+
+
+
+export function createMarker(map, coordinates, text) {
+    console.log("inside create marker"); //debug
+    let popupText  = "2025-04-04: User reported event FIRE, [LAT,LON], 'I heard a tree fell onto a car and started the fire'";
+    const marker = L.marker(coordinates).addTo(map);
+    marker.bindPopup(`2025-04-04: User reported event FIRE, [${coordinates[0]},${coordinates[1]}], '${text}'`).openPopup();
+    return marker;
+}
+
+  
+  // Example usage:
+  const center = [37.770817, -122.456907]; // SF start point
+  const polygonData = generateWildfireData(center);
+  

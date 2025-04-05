@@ -174,7 +174,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script type="module">
     import { getRegionalDisasterHistory, getHistoricalDisasters } from './api.js';
-    import { initializeMap, updateMapView, cityCoordinates } from './map.js';
+    import { initializeMap, initalizeFireReigon, updateMapView, cityCoordinates, createMarker } from './map.js';
     import { getUserLocation, findNearestCity } from './utils.js';
 
     document.addEventListener('DOMContentLoaded', async () => {
@@ -200,6 +200,7 @@
 
       // Initialize map using the imported function
       const map = initializeMap('map');
+      const fireReigon = initalizeFireReigon();
 
       // Initialize with user's location
       try {
@@ -272,6 +273,23 @@
             updateHistoricalData(region, city)
           ]);
         }
+      });
+
+      // HARDCODED DATA JUST TO VISUALIZE PINS
+      const pinDataStream = [
+        [37.7709, -122.4569, "I see heavy smoke rising near Golden Gate Park. Stay safe everyone!"],
+        [37.7710, -122.4570, "Fire trucks are rushing towards the park area. Hope everyone is okay."],
+        [37.7708, -122.4568, "A fire has broken out near the Conservatory of Flowers. Avoid the area if possible."],
+        [37.7707, -122.4571, "Witnessed flames near a building on Fulton Street. Authorities are on the scene."],
+        [37.7706, -122.4567, "Golden Gate Park is being evacuated due to a fire. Please follow safety protocols."],
+        [37.7705, -122.4572, "The fire near Stow Lake seems to be spreading. Stay alert and avoid the area."],
+        [37.7704, -122.4566, "Emergency services are responding to a fire incident near the Japanese Tea Garden. Stay safe!"]
+      ];
+
+      let popupText = 
+      pinDataStream.forEach(data => {
+        console.log("calling create marker "); // debug
+        createMarker(map, [data[0],data[1]], data[2]);
       });
 
       async function updateDisasterData(region, city = null) {
