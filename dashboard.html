@@ -278,17 +278,20 @@
       // HARDCODED DATA JUST TO VISUALIZE PINS
       const pinDataStream = [
         [37.7709, -122.4569, "I see heavy smoke rising near Golden Gate Park. Stay safe everyone!"],
-        [37.7710, -122.4570, "Fire trucks are rushing towards the park area. Hope everyone is okay."],
-        [37.7708, -122.4568, "A fire has broken out near the Conservatory of Flowers. Avoid the area if possible."],
-        [37.7707, -122.4571, "Witnessed flames near a building on Fulton Street. Authorities are on the scene."],
-        [37.7706, -122.4567, "Golden Gate Park is being evacuated due to a fire. Please follow safety protocols."],
-        [37.7705, -122.4572, "The fire near Stow Lake seems to be spreading. Stay alert and avoid the area."],
-        [37.7704, -122.4566, "Emergency services are responding to a fire incident near the Japanese Tea Garden. Stay safe!"]
+        [37.773361, -122.460952, "Fire trucks are rushing towards the park area. Hope everyone is okay."],
+        [37.771172, -122.45506, "A fire has broken out near the Conservatory of Flowers. Avoid the area if possible."],
+        [37.773293, -122.469964, "Witnessed flames near a building on Fulton Street. Authorities are on the scene."],
+        [37.771393, -122.45091, "Golden Gate Park is being evacuated due to a fire. Please follow safety protocols."],
+        [37.767382, -122.477297, "The fire near Stow Lake seems to be spreading. Stay alert and avoid the area."],
+        [37.766483, -122.496319, "Emergency services are responding to a fire incident near the Japanese Tea Garden. Stay safe!"]
       ];
 
       pinDataStream.forEach(data => {
         console.log("calling create marker "); // debug
-        createMarker(map, [data[0],data[1]], data[2]);
+        createMarker(map, [data[0],data[1]], data[2], "FIRE");
+        setTimeout(() => {
+          marker.remove();
+        }, 12000 * Math.floor(Math.random() * (10 - 1 + 1) + 1));
       });
 
       async function updateDisasterData(region, city = null) {

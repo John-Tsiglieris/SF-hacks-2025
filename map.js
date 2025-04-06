@@ -104,10 +104,11 @@ export function initializeMap(elementId) {
     return map;
 }
 
+let polygon
 export function initalizeFireReigon() {
     if (map) {
         console.log("Initializing the fire reigon"); //debug
-        var polygon = L.polygon(
+        polygon = L.polygon(
             [
                 [37.770918, -122.458205],
                 [37.768272, -122.459579],
@@ -119,6 +120,7 @@ export function initalizeFireReigon() {
         console.error("Map is not initialized. Please initialize the map before adding polygons.");
     }
 }
+
 
 
 
@@ -200,16 +202,90 @@ function UGCGeocodeToCoords(code) {
  *
  * See ~line 289 for on dashboard.html for example usage
  * 
+ * @param {int} expiration - The time in seconds when the marker should be removed
+ * NOTE: Ideally, users/mods would delete obsolete markers but for the sake the demo
+ * we'll just have them remove themselves after a certain time.
  * @returns {marker} - The actual pin object, but maybe it's not needed
  */
 export function createMarker(map, coordinates, text, type = "unknown", user = "anonymous") {
     const marker = L.marker(coordinates).addTo(map);
     marker.bindPopup(`2025-04-04: User ${user} reported event ${type}, [${coordinates[0]},${coordinates[1]}], '${text}'`).openPopup();
+    timedMarkerRemove(marker, 8);
     return marker;
+}
+
+function timedMarkerRemove(marker, expiration) {
+    setTimeout(() => {
+        marker.remove();
+    }, expiration * Math.floor(Math.random() * (10 - 1 + 1) + 1) * 1000);
 }
 
   
   // Example usage:
   const center = [37.770817, -122.456907]; // SF start point
-  const polygonData = generateWildfireData(center);
+  //const polygonData = generateWildfireData(center);
+    const polygonData = [
+        [
+            [37.770647, -122.457175],
+            [37.769496, -122.458291],
+            [37.769021, -122.455716]
+        ],
+        [
+            [37.772277, -122.456746],
+            [37.772685, -122.458892],
+            [37.768749, -122.459664],
+            [37.767732, -122.455115],
+            [37.771056, -122.45357]
+        ],
+        [ // fire spreads through panhandle
+            [37.774652, -122.454944],
+            [37.774516, -122.458034],
+            [37.773024, -122.459493],
+            [37.770921, -122.460351],
+            [37.768885, -122.45975],
+            [37.76685, -122.458119],
+            [37.767053, -122.454686],
+            [37.770953, -122.453935],
+            [37.772039, -122.448699],
+            [37.772853, -122.448914],
+            [37.77248, -122.454364],
+            [37.774888, -122.454879]
+        ], 
+        [// mostly westward expansion
+            [37.772089, -122.454075],
+            [37.773124, -122.444934],
+            [37.7727, -122.442917],
+            [37.77119, -122.45386],
+            [37.766543, -122.453023],
+            [37.766458, -122.460726],
+            [37.768613, -122.463892],
+            [37.77136, -122.466209],
+            [37.773498, -122.463934],
+            [37.773498, -122.463934]
+        ],
+        [   //fire hits mount sutro
+            [37.766306, -122.47256],
+            [37.768986, -122.470758],
+            [37.768511, -122.467282],
+            [37.770444, -122.464364],
+            [37.773124, -122.469685],
+            [37.77482, -122.454836],
+            [37.772276, -122.453892],
+            [37.773871, -122.439344],
+            [37.773294, -122.439344],
+            [37.771326, -122.453721],
+            [37.766679, -122.453163],
+            [37.762777, -122.45445],
+            [37.760945, -122.457325],
+            [37.763049, -122.459729],
+            [37.766441, -122.459986]
+        ]
+    ];
+
+let t = 0;
+const interval = setInterval(() => {
+  if (t >= polygonData.length) return clearInterval(interval);
+  polygon.setLatLngs(polygonData[t]);
+  t++;
+}, 4000);
   
